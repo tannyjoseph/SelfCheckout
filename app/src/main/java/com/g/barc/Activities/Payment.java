@@ -1,15 +1,16 @@
-package com.g.barc;
+package com.g.barc.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class Cart extends AppCompatActivity {
+import com.g.barc.R;
+
+public class Payment extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cart);
-
+        setContentView(R.layout.activity_payment);
     }
 }

@@ -1,4 +1,4 @@
-package com.g.barc;
+package com.g.barc.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +15,6 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,12 +29,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.camerakit.CameraKitView;
+import com.g.barc.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector;
@@ -47,13 +44,9 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -142,9 +135,7 @@ public class MainActivity extends AppCompatActivity {
                                                         break;
 
                                                     case FirebaseVisionBarcode.TYPE_PRODUCT:
-                                                        String a = barcode.getDisplayValue();
-                                                        Toast.makeText(MainActivity.this, a, Toast.LENGTH_SHORT).show();
-
+                                                        final String a = barcode.getDisplayValue();
 
                                                         RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
 
@@ -177,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
                                                                                 intent.putExtra("brand_name", jo.getString("brand"));
                                                                                 intent.putExtra("price", "$" + j.getString("price"));
                                                                                 intent.putExtra("image", jsonObject);
+                                                                                intent.putExtra("upc", a);
                                                                                 startActivity(intent);
                                                                             }
 

@@ -1,4 +1,4 @@
-package com.g.barc;
+package com.g.barc.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.g.barc.Classes.Items;
+import com.g.barc.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
@@ -28,7 +30,7 @@ public class Details extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        final String sname, sbrand ,sprice;
+        final String sname, sbrand ,sprice, supc;
 
         name = findViewById(R.id.name);
         brand = findViewById(R.id.brand_name);
@@ -40,6 +42,7 @@ public class Details extends AppCompatActivity {
         sname = intent.getStringExtra("name");
         sbrand = intent.getStringExtra("brand_name");
         sprice = intent.getStringExtra("price");
+        supc = intent.getStringExtra("upc");
 
         name.setText(sname);
         brand.setText(sbrand);
@@ -58,10 +61,13 @@ public class Details extends AppCompatActivity {
             }
         });
 
+
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.child("Items").push().setValue(sname);
+
+                Items items = new Items(sname,supc, sprice);
+                db.child("Items").push().setValue(items);
             }
         });
 
