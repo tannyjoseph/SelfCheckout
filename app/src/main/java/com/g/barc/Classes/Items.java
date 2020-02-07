@@ -3,15 +3,8 @@ package com.g.barc.Classes;
 public class Items {
 
     private String itemname;
+    private String upc;
     private String price;
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
 
     public Items(String itemname, String upc, String sprice) {
         this.itemname = itemname;
@@ -22,7 +15,6 @@ public class Items {
     public Items(){
 
     }
-    private String upc;
 
     public String getItemname() {
         return itemname;
@@ -38,5 +30,13 @@ public class Items {
 
     public void setUpc(String upc) {
         this.upc = upc;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 }

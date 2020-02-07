@@ -143,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
                                                         System.out.println(url2);
 
 
-
                                                         JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.GET, url2, null,
                                                                 new Response.Listener<JSONObject>() {
                                                                     @Override
@@ -155,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
                                                                             JSONArray items = response.getJSONArray("items");
                                                                             JSONObject jo = (JSONObject) items.get(0);
 
-                                                                            System.out.println("he"+jo.getString("upc"));
+                                                                            System.out.println("he" + jo.getString("upc"));
                                                                             JSONArray offers = jo.getJSONArray("offers");
                                                                             JSONObject j = (JSONObject) offers.get(0);
 
@@ -166,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                                                                                 Intent intent = new Intent(MainActivity.this, Details.class);
                                                                                 intent.putExtra("name", jo.getString("title"));
                                                                                 intent.putExtra("brand_name", jo.getString("brand"));
-                                                                                intent.putExtra("price", "$" + j.getString("price"));
+                                                                                intent.putExtra("price", "₹" + j.getString("price"));
                                                                                 intent.putExtra("image", jsonObject);
                                                                                 intent.putExtra("upc", a);
                                                                                 startActivity(intent);
@@ -222,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
-
 
 
     }

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.g.barc.Adapters.ItemsAdapter;
 import com.g.barc.Classes.Items;
@@ -19,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +31,9 @@ public class Cart extends AppCompatActivity {
     List<Items> list;
     ItemsAdapter adapter;
     Button pay;
+    float sum;
+    static String price_t;
+    TextView tprice;
 
 
     @Override
@@ -38,6 +44,10 @@ public class Cart extends AppCompatActivity {
         pay = findViewById(R.id.pay);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        tprice = findViewById(R.id.tprice);
+
+        final NumberFormat formatter = new DecimalFormat("#0.00");
+
 
         list = new ArrayList<Items>();
 
@@ -46,6 +56,8 @@ public class Cart extends AppCompatActivity {
         bd.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                 sum = 0;
+
 
                 for(DataSnapshot child : dataSnapshot.getChildren()){
                     System.out.println("hey" + child.getValue());
@@ -53,11 +65,16 @@ public class Cart extends AppCompatActivity {
                     Items items1 = child.getValue(Items.class);
                     System.out.println("ka"+ items1.getItemname());
 
+
                     String name = items1.getItemname();
                     String price = items1.getPrice();
                     String upc = items1.getUpc();
 
-                    Items data = new Items(name, price, upc);
+                    String p = price.substring(1);
+
+                    sum += Float.valueOf(p);
+
+                    Items data = new Items(name,  upc, price);
 
                     list.add(data);
 
@@ -66,6 +83,9 @@ public class Cart extends AppCompatActivity {
                 }
 
                 System.out.println(list);
+                price_t = formatter.format(sum);
+
+                tprice.setText("Total Price: " + price_t);
 
 
             }
