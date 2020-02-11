@@ -3,6 +3,7 @@ package com.g.barc.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.g.barc.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
@@ -19,6 +22,7 @@ import org.json.JSONObject;
 public class Payment extends AppCompatActivity implements PaymentResultListener {
     Button buttonConfirmOrder;
     EditText editTextPayment;
+    DatabaseReference bd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +67,6 @@ public class Payment extends AppCompatActivity implements PaymentResultListener 
             JSONObject options = new JSONObject();
             options.put("name", "Razorpay Corp");
             options.put("description", "Demoing Charges");
-            //You can omit the image option to fetch the image from dashboard
             options.put("image", "https://rzp-mobile.s3.amazonaws.com/images/rzp.png");
             options.put("currency", "INR");
 
@@ -89,6 +92,12 @@ public class Payment extends AppCompatActivity implements PaymentResultListener 
     @Override
     public void onPaymentSuccess(String s) {
         Toast.makeText(this, "Payment successfully done! " + s, Toast.LENGTH_SHORT).show();
+
+        bd = FirebaseDatabase.getInstance().getReference().child("Items");
+
+        bd.removeValue();
+
+        startActivity(new Intent(Payment.this, MainActivity.class));
 
     }
 

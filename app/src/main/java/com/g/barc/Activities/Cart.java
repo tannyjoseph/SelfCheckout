@@ -34,7 +34,7 @@ public class Cart extends AppCompatActivity {
     float sum;
     static String price_t;
     TextView tprice;
-
+    DatabaseReference bd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,22 +48,21 @@ public class Cart extends AppCompatActivity {
 
         final NumberFormat formatter = new DecimalFormat("#0.00");
 
-
         list = new ArrayList<Items>();
 
-        DatabaseReference bd = FirebaseDatabase.getInstance().getReference().child("Items");
+        bd = FirebaseDatabase.getInstance().getReference().child("Items");
 
         bd.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                 sum = 0;
+                sum = 0;
 
 
-                for(DataSnapshot child : dataSnapshot.getChildren()){
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
                     System.out.println("hey" + child.getValue());
 
                     Items items1 = child.getValue(Items.class);
-                    System.out.println("ka"+ items1.getItemname());
+                    System.out.println("ka" + items1.getItemname());
 
 
                     String name = items1.getItemname();
@@ -74,7 +73,7 @@ public class Cart extends AppCompatActivity {
 
                     sum += Float.valueOf(p);
 
-                    Items data = new Items(name,  upc, price);
+                    Items data = new Items(name, upc, price);
 
                     list.add(data);
 
@@ -103,6 +102,12 @@ public class Cart extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
     }
 }

@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -18,7 +19,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -32,7 +32,6 @@ import com.camerakit.CameraKitView;
 import com.g.barc.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector;
@@ -52,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
     Button button;
     ImageView image;
-    TextView txtView;
     private CameraKitView cameraKitView;
+    ProgressDialog progressDialog;
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -67,12 +66,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         button = findViewById(R.id.button);
-        txtView = findViewById(R.id.txtContent);
-        image = findViewById(R.id.img);
 
         cameraKitView = findViewById(R.id.camera);
         verifyStoragePermissions(this);
 
+        progressDialog = new ProgressDialog(this);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,20 +86,18 @@ public class MainActivity extends AppCompatActivity {
 
                             final Bitmap bit = BitmapFactory.decodeFile(savedphoto.getAbsolutePath());
 
+                            progressDialog.show();
+                            progressDialog.setContentView(R.layout.anim);
 
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    image.setImageBitmap(bit);
-                                }
-                            });
+                            progressDialog.setCancelable(true);
+
 
                             FirebaseVisionImage img = FirebaseVisionImage.fromBitmap(bit);
                             FirebaseVisionBarcodeDetector detect = FirebaseVision.getInstance()
                                     .getVisionBarcodeDetector();
 
 
-                            Task<List<FirebaseVisionBarcode>> result = detect.detectInImage(img)
+                            detect.detectInImage(img)
                                     .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionBarcode>>() {
                                         @Override
                                         public void onSuccess(List<FirebaseVisionBarcode> barcodes) {
@@ -162,6 +158,8 @@ public class MainActivity extends AppCompatActivity {
                                                                             String jsonObject = (String) image.get(0);
 
                                                                             if (response != null) {
+                                                                                progressDialog.dismiss();
+
                                                                                 Intent intent = new Intent(MainActivity.this, Details.class);
                                                                                 intent.putExtra("name", jo.getString("title"));
                                                                                 intent.putExtra("brand_name", jo.getString("brand"));
